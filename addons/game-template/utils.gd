@@ -15,3 +15,9 @@ func reparent_node(node: Node2D, new_parent, update_transform = false):
 	new_parent.add_child(node)
 	if update_transform:
 		node.global_transform = previous_xform
+
+func get_player():
+	return get_node("/root/SceneManager/CurrentScene").get_children().back().find_child("Player")
+
+func get_scene_manager():
+	return get_node("/root/SceneManager")

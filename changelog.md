@@ -1,127 +1,130 @@
-# Changelog
+# Change Log
+All notable changes to this project are documented below.
 
-All notable changes to this project will be documented in this file.
+The format is based on [keep a changelog](http://keepachangelog.com/) and this project uses [semantic versioning](http://semver.org/).
 
-Versioning follows [calver](https://calver.org/) with the `YYYY-MM-MICRO` scheme.
+## [3.3.1] - 2023-04-17
 
-Inspired by [keepachngelog.com](https://keepachangelog.com/en/1.0.0/).
+### Fixed
 
-#### Legend
+- Fix arguments for HTTPRequest.request() for beta17
+- Fix typehints for enums in Godot 4.0-rc1
+- Fix type check and typehint for Godot 4.0-rc3
+- Fix null byte array error in GodotHttpAdapter for C#
 
-🟢 Added\
-🔵 Changed\
-⚪ Fixed\
-🟠 Removed\
-🔴 Deprecated
+## [3.3.0] - 2023-01-30
 
-PS: remember to add 2 trailing spaces at the end of each line (or a single `\` symbol).\
-This is needed to trigger new line rendering for markdown.
+### Added
 
----
+- Add support for subscription validation APIs that were added in Nakama v3.13.0
+- Add support for sending events
+- Allow disabling threads for making HTTP requests
+- Add support for delete_account_sync() and other API changes that were added in Nakama v3.15.0
 
-## v2022.04.0
+## [3.2.0] - 2022-08-30
 
-🟢 Godot 3.4.4 support \
-🔵 Big refactoring of the template into a separate addon \
-🔵 Menu.tsnc: reduced the number of files. Smaller scripts and resources have
-been merged
-🔵 During transitions: scenes are not paused by default anymore. If users
-want to pause scenes during transitions, it's possible to do it by setting
-`pause_scenes_on_transitions = true` in `Game.gd`
+### Fixed
 
-## v2021.12.0
+- Fix NakamaSocket.add_matchmaker_party_async() and the tests for it
+- Fix MatchData.op_code type in schema to TYPE_INT
+- Fix circular reference in Nakama singleton to itself
 
-🟢 Added Godot 3.4.2 support \
-🟢 Added `Game.restart_scene()` and `Game.restart_scene_with_params(override_params)` \
-🟢 Added `scenes._history` to keep track of scenes loading. Currently for internal use only. \
-History keeps track of the last 5 scenes and keep track of their parameters. \
-🔵 `gameplay.tscn`: use Node as root node instead of Node2D.
+### Added
 
-## v2021.11.0
+- Add support for receiving binary data in "NakamaRTAPI.MatchState"
+- Add support for sending and receiving binary data in "NakamaRTAPI.PartyData"
+- Add NakamaMultiplayerBridge to integrate with Godot's High-Level Multiplayer API
 
-🟢 Added Godot 3.4 support \
-🔵 Use GLES3 renderer by default. \
-Safari 15 supports WebGL2 starting from version 15, this means that
-GLES3 should be a safe default right now.
+## [3.1.0] - 2022-04-28
 
-## v2021.06.0
+### Added
 
-🟢 Added dispatch export. Thanks to vini-guerrero! [#50][pr50] \
-⚪ Fixed blurred render on HiDPI devices\
-⚪ Fixed [#49][i49]\
-🔵 Removed `resources/` top level folder, closes [#12][i12]\
+- Expose the "seen_before" property on "NakamaAPI.ApiValidatedPurchase"
+- Add support for creating match by name
+- Add support for "count_multple" on "NakamaSocket.add_matchmaker_async()" and "NakamaSocket.add_matchmaker_party_async()"
+- Add C# support classes to better integrate the .NET client with the Mono version of Godot, allowing HTML5 exports to work
 
-[pr50]: https://github.com/crystal-bit/godot-game-template/pull/50
-[i12]: https://github.com/crystal-bit/godot-game-template/issues/12
-[i49]: https://github.com/crystal-bit/godot-game-template/issues/49
+### Fixed
 
-## v2021.05.0
+- Fix receiving "NakamaRTAPI.PartyClose" message
+- Fix sending and receiving of PartyData
 
-🟢 **Godot 3.3** support!\
-🟢 CI scripts updated. Thanks to Andrea-Miele! [#47][pr47] [#48][pr48] \
-🟢 Added pause button for mobile in `gameplay.tscn`. Thanks to Andrea1141 [#44][pr44] \
-🟢 `menu.tscn`: added Godot version label
+## [3.0.0] - 2022-03-28
 
-[pr44]: https://github.com/crystal-bit/godot-game-template/pull/44
-[pr47]: https://github.com/crystal-bit/godot-game-template/pull/47
-[pr48]: https://github.com/crystal-bit/godot-game-template/pull/48
+### Added
 
-## v2021.04.2
+- Add realtime party support.
+- Add purchase validation functions.
+- Add Apple authentication functions.
+- Add "demote_group_users_async" function.
+- A session can be refreshed on demand with "session_refresh_async" method.
+- Session and/or refresh tokens can now be invalidated with a client logout.
+- The client now supports session auto-refresh using refresh tokens. This is enabled by default.
+- The client now supports auto-retrying failed request due to network error. This is enabled by defulut.
+- The client now support cancelling requests in-flight via "client.cancel_request".
 
-🟢 CI: support for automatic itch.io deploys. Thanks to Andrea-Miele [#41][pr41]
+### Fixed
 
-[pr41]: https://github.com/crystal-bit/godot-game-template/pull/41
+- Fix Dictionary serialization (e.g. "NakamaSocket.add_matchmaker_async" "p_string_props" and "p_numeric_props").
+- Pass join metadata onwards into match join message.
+- Don't stop processing messages when the game is paused.
+- Fix "rpc_async", "rpc_async_with_key". Now uses GET request only if no payload is passed.
+- Fix client errors parsing in Nakama 3.x
+- Make it possible to omit the label and query on NakamaClient.list_matches_async().
 
-## v2021.04.1
+### Backwards incompatible changes
 
-🟢 CI: support for automatic Android debug build. Thanks to Andrea-Miele https://github.com/crystal-bit/godot-game-template/pull/39 \
-🟠 `Main.tscn`: Removed `splash_transition_on_start` property\
-🔵 `Transitions` renamed to `Transition`\
-🔵 `Transition`: `is_playing` renamed to `is_displayed`\
-🔵 `Transition`: refactor animations name
+- The "received_error" signal on "NakamaSocket" is now emited with an "NakamaRTAPI.Error" object received from the server.
+  Previously, it was emitted with an integer error code when the socket failed to connect.
+  If you have old code using the "received_error" signal, you can switch to the new "connection_error" signal, which was added to replace it.
 
-## v2021.04.0
+## [2.1.0] - 2020-08-01
 
-🟢 Added version number in main menu. Thanks to Fahien https://github.com/crystal-bit/godot-game-template/pull/37 \
-🔵 `Game.change_scene` hides the progress bar by default. If you want to show
-loading progress, pass `{show_progress_bar = true}` as param\
-🔵 Scene tree not automatically paused anymore on scene change (input will still be captured to prevent messing with scenes during transitions)\
-⚪ Fixed issue [#17][i17]: optimized multithread loading\
-⚪ Fixed issue [#35][i35]: optimized single thread loading\
-⚪ Fixed issue [#32][i32]: crash when playing a specific scene\
-⚪ Fixed issue [#30][i30]: hide exit button on HTML5\
-⚪ `Game.size` correctly initialized also in `_ready` functions\
-🟠 `Gameplay.tscn`: Removed Player class and scene
+### Added
 
-[i17]: https://github.com/crystal-bit/godot-game-template/issues/17
-[i35]: https://github.com/crystal-bit/godot-game-template/issues/35
-[i32]: https://github.com/crystal-bit/godot-game-template/issues/32
-[i30]: https://github.com/crystal-bit/godot-game-template/issues/30
+- Add an optional log level parameter to "Nakama.create_client".
 
-## v2021.01.1
+### Changed
 
-🟢 Added `Game.size` to get current viewport game size\
-🟢 `Game.change_scene()`: added support for `show_progress_bar`. Usage example:
+- Update variable definitions to new gdscript variable controls.
 
-```gd
-Game.change_scene("res://myscene.tscn", {
-    'show_progress_bar': true
-})
-```
+### Fixed
 
-🔵 Changed default renderer to GLES2 (better HTML5 compatibility)\
-🔵 Changed `initial_fade_active` to `splash_transition_on_start`\
-⚪ Fixed many `gdlint` errors (all scripts now follow official GDScript\
-code style)
-⚪ Open Sans font filename is now lowercase\
-🟠 Removed squarebit pixel art font
+- Fix "add_friends_async" should have its "id" field input as optional.
+- Fix "add_matchmaker_async" and "MatchmakerAdd" parameter assignment.
+- Fix missing "presence" property in NakamaRTAPI.MatchData.
+- Fix NakamaSocket not emitting "received_error" correctly.
+- Fix "DEFAULT_LOG_LEVEL" in Nakama.gd not doing anything.
 
-## v2020.12.1
+## [2.0.0] - 2020-04-02
 
-🟢 Added changelog.md\
-⚪ Fixed error when loading a new scene\
-⚪ Fixed HTML5: crash on multithread loading [#15](https://github.com/crystal-bit/godot-game-template/issues/15)
+### Added
 
-## v2020.12.0
+- Decode base64 data in "MatchData". (breaks compat)
+- Add "FacebookInstantGame" endpoints (link/unlink/authenticate).
+- GDScript-style comments (removing all XML tags).
+- Add "list_storage_objects_async" "p_user_id" parameter to allow listing user(s) objects.
 
-Initial version.
+### Fixed
+
+- Fix encoding of "op_code" in "MatchDataSend" and marshalling of "NakamaSocket.send_match_state_[raw_]async".
+- Fix parsing of "MatchmakerMatched" messages when no token is specified.
+- Disable "HTTPRequest.use_threads" in HTML5 exports.
+- "NakamaSession.is_expired" returned reversed result.
+- Fix "NakamaClient.update_account_async" to allow updating account without username change.
+- Fix "NakamaClient.update_group_async" to allow updating group without name change.
+- Fix "HTTPAdapter._send_async" error catching for some edge cases.
+- Fix "NakamaClient.send_rpc_async" with empty payload (will send empty string now).
+- Fix "NakamaRTAPI.Status" parsing.
+- Fix "NakamaClient" "list_leaderboard_records_around_owner_async" and "list_leaderboard_records_async" parameter order. (breaks compat)
+- Rename "NakamaClient.JoinTournamentAsync" to "join_tournament_async" for consistent naming.
+- Update all "p_limit" parameters default in "NakamaClient" to "10".
+- Fix "NakamaRTAPI.Stream" parsing.
+
+## [1.0.0] - 2020-01-28
+### Added
+- Initial public release.
+- Client API implementation.
+- Realtime Socket implementation.
+- Helper singleton.
+- Setup instructions.

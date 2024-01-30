@@ -1,157 +1,320 @@
-![game-template-overview](https://user-images.githubusercontent.com/6860637/101258948-24c35c80-3726-11eb-8c64-7a201e945f73.png)
+Nakama Godot
+===========
 
-> 🌟 You make games, the template handles the boring stuff.
+> Godot client for Nakama server written in GDScript.
 
-<p>
-<a href="https://godotengine.org/download">
-  <img alt="Godot Download badge" src="https://img.shields.io/badge/godot-3.4-blue">
-</a>
+[Nakama](https://github.com/heroiclabs/nakama) is an open-source server designed to power modern games and apps. Features include user accounts, chat, social, matchmaker, realtime multiplayer, and much [more](https://heroiclabs.com).
 
-<a href="https://github.com/crystal-bit/godot-game-template/releases">
-  <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/crystal-bit/godot-game-template">
-</a>
+This client implements the full API and socket options with the server. It's written in GDScript to support Godot Engine `4.0+`.
 
-<a href="https://github.com/crystal-bit/godot-game-template/actions?query=workflow%3A%22godot-ci+export%22">
-  <img alt="GitHub workflow status" src="https://img.shields.io/github/workflow/status/crystal-bit/godot-game-template/godot-ci%20export?label=game-export">
-</a>
+Full documentation is online - https://heroiclabs.com/docs
 
-<!-- <a href="https://github.com/crystal-bit/godot-game-template/wiki">
-  <img alt="GitHub wiki" src="https://img.shields.io/badge/%F0%9F%93%96-wiki-blueviolet">
-</a> -->
+## Godot 3 & 4
 
-<a href="https://crystalbit.itch.io/godot-game-template">
-  <img alt="Play store badge" src="https://img.shields.io/badge/HTML5-Itch.io-critical">
-</a>
+You're currently looking at the Godot 4 version of the Nakama client for Godot.
 
-<a href="https://play.google.com/store/apps/details?id=org.crystalbit.godottemplate">
-  <img alt="Play store badge" src="https://img.shields.io/badge/Android-PlayStore-green">
-</a>
-</p>
+If you are using Godot 3, you need to use the ['master'
+branch](https://github.com/heroiclabs/nakama-godot/tree/godot-4) on GitHub.
 
-# Get started
+## Getting Started
 
-1. 💻 [Create a new repo using this template](https://github.com/crystal-bit/godot-game-template/generate)
-2. Clone the new repository locally
-3. Open the project in [Godot](https://godotengine.org/download/) (GDScript)
-4. Done
+You'll need to setup the server and database before you can connect with the client. The simplest way is to use Docker but have a look at the [server documentation](https://github.com/heroiclabs/nakama#getting-started) for other options.
 
-Read the [wiki](https://github.com/crystal-bit/godot-game-template/wiki/) to learn more.
+1. Install and run the servers. Follow these [instructions](https://heroiclabs.com/docs/install-docker-quickstart).
 
-## Used by
+2. Download the client from the [releases page](https://github.com/heroiclabs/nakama-godot/releases) and import it into your project. You can also [download it from the asset repository](#asset-repository).
 
-| Logo                                                                                                                                            | Title                               | Play it!                                                                                                                                                             | Source                                                            |
-| ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| ![YouAreUto icon](https://play-lh.googleusercontent.com/lL54YNps-UPuDONDHfy3pmn8_aVUZGMorHJcDArimJWCQKjjNax0QMxpiAWCc5PUPbU=s100-rw)            | **YouAreUto** (2019)                | [Android](https://play.google.com/store/apps/details?id=com.youare.uto), [iOS](https://apps.apple.com/app/brain-game-teaser-youareuto/id1590561597#?platform=iphone) | [GitHub](https://github.com/YouAreUto/YouAreUto)                  |
-| ![Defending Todot icon](https://imgur.com/Bn10XAf.png)                                                                                          | **Defending Todot** (2020)          | [HTML5](https://crystal-bit.github.io/defending-todot/)                                                                                                              | [GitHub](https://github.com/crystal-bit/defending-todot)          |
-| ![Karooto No Gase icon](https://play-lh.googleusercontent.com/sWgjV9dJxa1jKina0mNbU3fGmqA4zuqtRWXfhn_dfEK6reW90GH1uz0wsai1SG898bOZ=s100-rw)     | **Karooto No Gase** (2021)          | [Android](https://play.google.com/store/apps/details?id=org.calalinta.karootonogase), [Itch.io](https://calalinta.itch.io/)                                          | N/A                                                               |
-| ![Godot Game Template Demo](https://play-lh.googleusercontent.com/aOVexQckoyjN2WJp_puq8ifTr2TnWwJ-cNw6iflcH0IpQYp04m_ChTd0jwkCKalz5wVM=s100-rw) | **demo-godot-game-template** (2021) | [Android](https://play.google.com/store/apps/details?id=org.crystalbit.godottemplate)                                                                                | [GitHub](https://github.com/crystal-bit/demo-godot-game-template) |
+3. Add the `Nakama.gd` singleton (in `addons/com.heroiclabs.nakama/`) as an [autoload in Godot](https://docs.godotengine.org/en/stable/getting_started/step_by_step/singletons_autoload.html).
 
-_Get in contact if you want to be featured here!_
+4. Use the connection credentials to build a client object using the singleton.
 
-### Changelog
+    ```gdscript
+    extends Node
 
-- [changelog.md](./changelog.md)
+    func _ready():
+    	var scheme = "http"
+    	var host = "127.0.0.1"
+    	var port = 7350
+    	var server_key = "defaultkey"
+    	var client := Nakama.create_client(server_key, host, port, scheme)
+    ```
 
-# Features
+## Usage
 
-- **Continuos Integration**:
-  - Automatic desktop build (linux, windows, osx, HTML5)
-  - Automatic HTML5 deploy to Github pages
-  - Automatic HTML5 deploy to itch.io
-  - Automatic Android builds
-- **Scenes loading** with graphic transitions (fade-in/out)
-  - Send parameters to the new scene
-  - Input prevention during scene changes
-  - You can still play individual scenes for quick development
-  - Singlethread & Multithread
-- **Game pause** handling
-- `.gitignore`
-- Follows official GDScript guidelines (tested with [gdlint](https://github.com/Scony/godot-gdscript-toolkit#gdscript-toolkit))
-- Compatible with other Godot addons
+The client object has many methods to execute various features in the server or open realtime socket connections with the server.
 
-# How to
+### Authenticate
 
-## Change scene
+There's a variety of ways to [authenticate](https://heroiclabs.com/docs/authentication) with the server. Authentication can create a user if they don't already exist with those credentials. It's also easy to authenticate with a social profile from Google Play Games, Facebook, Game Center, etc.
 
-```gd
-Game.change_scene("res://scenes/gameplay/gameplay.tscn")
+```gdscript
+	var email = "super@heroes.com"
+	var password = "batsignal"
+	# Use 'await' to wait for the request to complete.
+	var session : NakamaSession = await client.authenticate_email_async(email, password)
+	print(session)
 ```
 
-![change_scene](https://user-images.githubusercontent.com/6860637/162567110-026c1979-6237-4255-bb2a-97815fc4b0c4.gif)
+### Sessions
 
-## Change scene and show progress bar
+When authenticated the server responds with an auth token (JWT) which contains useful properties and gets deserialized into a `NakamaSession` object.
 
-```gd
-Game.change_scene("res://scenes/gameplay/gameplay.tscn", {
-  "show_progress_bar": true
-})
+```gdscript
+	print(session.token) # raw JWT token
+	print(session.user_id)
+	print(session.username)
+	print("Session has expired: %s" % session.expired)
+	print("Session expires at: %s" % session.expire_time)
 ```
 
-![progress](https://user-images.githubusercontent.com/6860637/162567097-81b5c54e-1ee5-42b9-a583-60764ecff069.gif)
+It is recommended to store the auth token from the session and check at startup if it has expired. If the token has expired you must reauthenticate. The expiry time of the token can be changed as a setting in the server.
 
-## Change scene and pass parameters
-
-```gd
-# you can pass whatever value you like: int, float, dictionary, ...
-var params = {
-  "level": 4,
-  "skin": 'dark'
-}
-Game.change_scene("res://scenes/gameplay/gameplay.tscn", params)
+```gdscript
+	var authtoken = "restored from somewhere"
+	var session2 = NakamaClient.restore_session(authtoken)
+	if session2.expired:
+		print("Session has expired. Must reauthenticate!")
 ```
 
-```gd
-# gameplay.gd
+NOTE: The length of the lifetime of a session can be changed on the server with the `--session.token_expiry_sec` command flag argument.
 
-func pre_start(params):
-   print(params.level) # 4
-   print(params.skin) # 'dark'
-   # setup your scene here
+### Requests
+
+The client includes lots of builtin APIs for various features of the game server. These can be accessed with the async methods. It can also call custom logic in RPC functions on the server. These can also be executed with a socket object.
+
+All requests are sent with a session object which authorizes the client.
+
+```gdscript
+	var account = await client.get_account_async(session)
+	print(account.user.id)
+	print(account.user.username)
+	print(account.wallet)
 ```
 
-To learn more about all the features, read the [wiki](https://github.com/crystal-bit/godot-game-template/wiki/2.-Features). 
+### Exceptions
 
-## Center a Node2D into the viewport
+Since Godot Engine does not support exceptions, whenever you make an async request via the client or socket, you can check if an error occurred via the `is_exception()` method.
 
-```gd
-$Sprite.position = Game.size / 2
+```gdscript
+	var an_invalid_session = NakamaSession.new() # An empty session, which will cause and error when we use it.
+	var account2 = await client.get_account_async(an_invalid_session)
+	print(account2) # This will print the exception
+	if account2.is_exception():
+		print("We got an exception")
 ```
 
-## Contributors
+### Socket
 
-Many features were implemented only thanks to the help of:
+The client can create one or more sockets with the server. Each socket can have it's own event listeners registered for responses received from the server.
 
-- [Andrea-Miele](https://github.com/Andrea-Miele)
-- [Fahien](https://github.com/Fahien)
-- [Andrea1141](https://github.com/Andrea1141)
-- [vini-guerrero](https://github.com/vini-guerrero)
+```gdscript
+	var socket = Nakama.create_socket_from(client)
+	socket.connected.connect(self._on_socket_connected)
+	socket.closed.connect(self._on_socket_closed)
+	socket.received_error.connect(self._on_socket_error)
+	await socket.connect_async(session)
+	print("Done")
 
-Also many tools were already available in the open source community, see the [Thanks](#thanks) section.
+func _on_socket_connected():
+	print("Socket connected.")
 
-## Contributing
+func _on_socket_closed():
+	print("Socket closed.")
 
-Development of new versions is made on the [`dev`](https://github.com/crystal-bit/godot-game-template/tree/dev) branch.
+func _on_socket_error(err):
+	printerr("Socket error %s" % err)
+```
 
-If you want to help the project, create games and feel free to get in touch and report any issue.
+## Integration with Godot's High-level Multiplayer API
 
-![Discord](https://img.shields.io/discord/686600734636376102?logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)
+Godot provides a [High-level Multiplayer
+API](https://docs.godotengine.org/en/latest/tutorials/networking/high_level_multiplayer.html),
+allowing developers to make RPCs, calling functions that run on other peers in
+a multiplayer match.
 
-You can also join [the Discord server](https://discord.gg/SA6S2Db) (`#godot-game-template` channel).
+For example:
 
-Before adding new features please open an issue to discuss it with other contributors.
+```gdscript
+func _process(delta):
+	if not is_multiplayer_authority():
+		return
 
-## Thanks
+	var input_vector = get_input_vector()
 
-- For support & inspiration:
-  - All the [contributors](https://github.com/crystal-bit/godot-game-template/graphs/contributors)
-  - Crystal Bit community
-  - GameLoop.it
-  - Godot Engine Italia
-  - Godot Engine
-- For their work on free and open source software:
-  - [aBARICHELLO](https://github.com/aBARICHELLO/godot-ci)
-  - [croconut](https://github.com/croconut/godot-multi-builder)
-  - [josephbmanley](https://github.com/josephbmanley)
-  - [GDQuest](https://github.com/GDquest)
-  - [Scony](https://github.com/Scony)
-  - [myood](https://github.com/myood)
+	# Move the player locally.
+	velocity = input_vector * SPEED
+	move_and_slide()
+
+	# Then update the player's position on all other connected clients.
+	update_remote_position.rpc(position)
+
+@rpc(any_peer)
+func update_remote_position(new_position):
+	position = new_position
+```
+
+Godot provides a number of built-in backends for sending the RPCs, including:
+ENet, WebSockets, and WebRTC.
+
+However, you can also use the Nakama client as a backend! This can allow you to
+continue using Godot's familiar High-level Multiplayer API, but with the RPCs
+transparently sent over a realtime Nakama match.
+
+To do that, you need to use the `NakamaMultiplayerBridge` class:
+
+```gdscript
+var multiplayer_bridge
+
+func _ready():
+	# [...]
+	# You must have a working 'socket', created as described above.
+
+	multiplayer_bridge = NakamaMultiplayerBridge.new(socket)
+	multiplayer_bridge.match_join_error.connect(self._on_match_join_error)
+	multiplayer_bridge.match_joined.connect(self._on_match_joined)
+	get_tree().get_multiplayer().set_multiplayer_peer(multiplayer_bridge.multiplayer_peer)
+
+func _on_match_join_error(error):
+	print ("Unable to join match: ", error.message)
+
+func _on_match_join() -> void:
+	print ("Joined match with id: ", multiplayer_bridge.match_id)
+```
+
+You can also connect to any of the usual signals on `MultiplayerAPI`, for
+example:
+
+```gdscript
+	get_tree().get_multiplayer().peer_connected.connect(self._on_peer_connected)
+	get_tree().get_multiplayer().peer_disconnected.connect(self._on_peer_disconnected)
+
+func _on_peer_connected(peer_id):
+	print ("Peer joined match: ", peer_id)
+
+func _on_peer_disconnected(peer_id):
+	print ("Peer left match: ", peer_id)
+```
+
+Then you need to join a match, using one of the following methods:
+
+- Create a new private match, with your client as the host.
+  ```gdscript
+  multiplayer_bridge.create_match()
+  ```
+
+- Join a private match.
+  ```gdscript
+  multiplayer_bridge.join_match(match_id)
+  ```
+
+- Create or join a private match with the given name.
+  ```gdscript
+  multiplayer_bridge.join_named_match(match_name)
+  ```
+
+- Use the matchmaker to find and join a public match.
+  ```gdscript
+  var ticket = await socket.add_matchmaker_async()
+  if ticket.is_exception():
+	print ("Error joining matchmaking pool: ", ticket.get_exception().message)
+	return
+
+  multiplayer_bridge.start_matchmaking(ticket)
+  ```
+
+After the the "match_joined" signal is emitted, you can start sending RPCs as
+usual with the `rpc()` function, and calling any other functions associated with
+the High-level Multiplayer API, such as `get_tree().get_multiplayer().get_unique_id()`
+and `node.set_network_authority(peer_id)` and `node.is_network_authority()`.
+
+## .NET / C#
+
+If you're using the .NET version of Godot with C# support, you can use the
+[Nakama .NET client](https://github.com/heroiclabs/nakama-dotnet/), which can be
+installed via NuGet:
+
+```
+dotnet add package NakamaClient
+```
+
+This addon includes some C# classes for use with the .NET client, to provide deeper
+integration with Godot:
+
+- `GodotLogger`: A logger which prints to the Godot console.
+- `GodotHttpAdapter`: An HTTP adapter which uses Godot's HTTPRequest node.
+- `GodotWebSocketAdapter`: A socket adapter which uses Godot's WebSocketClient.
+
+Here's an example of how to use them:
+
+```csharp
+	var http_adapter = new GodotHttpAdapter();
+	// It's a Node, so it needs to be added to the scene tree.
+	// Consider putting this in an autoload singleton so it won't go away unexpectedly.
+	AddChild(http_adapter);
+
+	const string scheme = "http";
+	const string host = "127.0.0.1";
+	const int port = 7350;
+	const string serverKey = "defaultkey";
+
+	// Pass in the 'http_adapter' as the last argument.
+	var client = new Client(scheme, host, port, serverKey, http_adapter);
+
+	// To log DEBUG messages to the Godot console.
+	client.Logger = new GodotLogger("Nakama", GodotLogger.LogLevel.DEBUG);
+
+	ISession session;
+	try {
+		session = await client.AuthenticateDeviceAsync(OS.GetUniqueId(), "TestUser", true);
+	}
+	catch (ApiResponseException e) {
+		GD.PrintErr(e.ToString());
+		return;
+	}
+
+	var websocket_adapter = new GodotWebSocketAdapter();
+	// Like the HTTP adapter, it's a Node, so it needs to be added to the scene tree.
+	// Consider putting this in an autoload singleton so it won't go away unexpectedly.
+	AddChild(websocket_adapter);
+
+	// Pass in the 'websocket_adapter' as the last argument.
+	var socket = Socket.From(client, websocket_adapter);
+```
+
+**Note:** _The out-of-the-box Nakama .NET client will work fine with desktop builds of your game! However, it won't work with HTML5 builds, unless you use the `GodotHttpAdapter` and `GodotWebSocketAdapter` classes._
+
+## Contribute
+
+The development roadmap is managed as GitHub issues and pull requests are welcome. If you're interested to improve the code please open an issue to discuss the changes or drop in and discuss it in the [community forum](https://forum.heroiclabs.com).
+
+### Run Tests
+
+To run tests you will need to run the server and database. Most tests are written as integration tests which execute against the server. A quick approach we use with our test workflow is to use the Docker compose file described in the [documentation](https://heroiclabs.com/docs/install-docker-quickstart).
+
+Additionally, you will need to copy (or symlink) the `addons` folder inside the `test_suite` folder. You can now run the `test_suite` project from the Godot Editor.
+
+To run the tests on a headless machine (without a GPU) you can download a copy of [Godot Headless](https://godotengine.org/download/server) and run it from the command line.
+
+To automate this procedure, move the headless binary to `test_suite/bin/godot.elf`, and run the tests via the `test_suite/run_tests.sh` shell script (exit code will report test failure/success).
+
+```shell
+cd nakama
+docker-compose -f ./docker-compose-postgres.yml up
+cd ..
+cd nakama-godot
+sh test_suite/run_tests.sh
+```
+
+### Make a new release
+
+To make a new release ready for distribution, simply zip the addons folder recursively (possibly adding `CHANGELOG`, `LICENSE`, and `README.md` too).
+
+On unix systems, you can run the following command (replacing `$VERSION` with the desired version number). Remember to update the `CHANGELOG` file first.
+
+```shell
+zip -r nakama-$VERSION.zip addons/ LICENSE CHANGELOG.md README.md
+```
+
+### License
+
+This project is licensed under the [Apache-2 License](https://github.com/heroiclabs/nakama-godot/blob/master/LICENSE).
