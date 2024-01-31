@@ -36,28 +36,23 @@ env:
   ITCH_IO: ${{ github.event.inputs.itch_io }}
 
 jobs:
-  export_web:
+  export-web:
     name: Web Export
-    runs-on: ubuntu-20.04
-    if: ${{ github.event.inputs.export_platform == 'web' || github.event.inputs.export_platform == 'all' }}
+    runs-on: ubuntu-latest
     container:
-      image: barichello/godot-ci:3.4.4
+      image: barichello/godot-ci:4.2.1
     steps:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup
         run: |
-          mkdir -v -p ~/.local/share/godot/templates
+          mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
       - name: Web Build
-        run: |
-          cd ${EXPORT_FOLDER}
-          mkdir -v -p build/web
-          godot -v --export "HTML5" ./build/web/index.html
+        run: godot -v --export "HTML5" ./build/web/index.html
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
-          name: Web
-          path: ${{ env.EXPORT_FOLDER }}/build/web
-      - name: Zip Folder
-        run: zip -r itch.zip ${{ env.EXPORT_FOLDER }}/build/web
+          name: web
+          path: ./build/web/
+
