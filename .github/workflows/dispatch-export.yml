@@ -42,14 +42,17 @@ jobs:
     container:
       image: barichello/godot-ci:4.2.1
     steps:
+      - name: Make Working Directory
+        run: mkdir /var/app && cd /var/app
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
       - name: Setup
+        working-directory: /var/app
         run: |
           mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
-          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
+          mv /root/.local/share/godot/templates/4.2.1.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
       - name: Web Build
-        run: godot -v --export-release "HTML5" ./build/web/index.html
+        run: godot -v --export-debug "Web" --headless ./build/web/index.html
       - name: Upload Artifact
         uses: actions/upload-artifact@v1
         with:
