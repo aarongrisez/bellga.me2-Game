@@ -1,8 +1,5 @@
 name: "Dispatch Export"
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       godot_version:
