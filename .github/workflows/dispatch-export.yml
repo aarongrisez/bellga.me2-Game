@@ -48,10 +48,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup
         working-directory: /var/app
+        # See https://github.com/godotengine/godot/issues/72360 for description of .godot directories required.
+        # Also, create export templates directory where GHA expects it and move templates there
         run: |
-          mkdir -v -p build/linux build/windows build/mac build/web /github/home/.local/share/godot/export_templates/
-          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable /github/home/.local/share/godot/export_templates/${GODOT_VERSION}.stable
-          ls /github/home/.local/share/godot/export_templates
+          mkdir -v -p .godot/editor .godot/imported build/web /github/home/.local/share/godot/export_templates/
+          mv /root/.local/share/godot/templates/4.2.1.stable /github/home/.local/share/godot/export_templates/.stable
       - name: Web Build
         run: godot -v --export-debug "Web" --headless ./build/web/index.html
       - name: Upload Artifact
