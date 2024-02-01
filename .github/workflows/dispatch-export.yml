@@ -1,5 +1,8 @@
 name: "Dispatch Export"
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       godot_version:
@@ -58,5 +61,5 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: web
-          path: ./build/web/
+          path:  /var/app/build/web/
 
