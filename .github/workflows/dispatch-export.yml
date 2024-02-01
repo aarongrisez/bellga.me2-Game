@@ -52,7 +52,7 @@ jobs:
         # Also, create export templates directory where GHA expects it and move templates there
         run: |
           mkdir -v -p .godot/editor .godot/imported build/web /github/home/.local/share/godot/export_templates/
-          mv /root/.local/share/godot/templates/4.2.1.stable /github/home/.local/share/godot/export_templates/.stable
+          mv /root/.local/share/godot/templates/4.2.1.stable /github/home/.local/share/godot/export_templates/4.2.1.stable
       - name: Web Build
         run: godot -v --export-debug "Web" --headless ./build/web/index.html
       - name: Upload Artifact
