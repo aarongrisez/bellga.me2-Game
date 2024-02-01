@@ -51,7 +51,7 @@ jobs:
         # See https://github.com/godotengine/godot/issues/72360 for description of .godot directories required.
         # Also, create export templates directory where GHA expects it and move templates there
         run: |
-          mkdir -v -p .godot/shader_cache build/web /github/home/.local/share/godot/export_templates/
+          mkdir -v -p build/web /github/home/.local/share/godot/export_templates/
           mv /root/.local/share/godot/templates/4.2.1.stable /github/home/.local/share/godot/export_templates/4.2.1.stable
       - name: Web Build
         run: godot -v --export-debug "Web" --headless ./build/web/index.html
