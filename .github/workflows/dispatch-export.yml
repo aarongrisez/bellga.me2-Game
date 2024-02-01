@@ -50,7 +50,8 @@ jobs:
         working-directory: /var/app
         run: |
           mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
-          mv /root/.local/share/godot/templates/4.2.1.stable ~/.local/share/godot/templates/${GODOT_VERSION}.stable
+          ls /root/.local/share/godot/templates/${GODOT_VERSION}.stable
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable /github/home/.local/share/godot/templates/${GODOT_VERSION}.stable
       - name: Web Build
         run: godot -v --export-debug "Web" --headless ./build/web/index.html
       - name: Upload Artifact
