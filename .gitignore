@@ -1,4 +1,5 @@
 # Godot-specific ignores
+.godot
 .import/
 export.cfg
 # Dummy HTML5 export presets file for continuous integration
